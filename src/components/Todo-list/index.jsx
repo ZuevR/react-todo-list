@@ -16,7 +16,10 @@ export class TodoList extends Component {
     return (
       <div className="mt-4 todo-list-wrapper">
         <Input addTask={ this.addTask }/>
-        { !!this.state.tasks.length && <List tasks={ this.state.tasks } removeTask={ this.removeTask }/> }
+        { !!this.state.tasks.length && <List tasks={ this.state.tasks }
+                                             removeTask={ this.removeTask }
+                                             toggleTask={ this.toggleTaskStatus }
+        /> }
       </div>
     );
   }
@@ -39,7 +42,20 @@ export class TodoList extends Component {
   removeTask = id => {
     this.setState({
       tasks: this.state.tasks.filter(item => item.id !== id)
+    }, () => {
+      console.log('TodoList state:', this.state);
     });
-  }
+  };
+
+  toggleTaskStatus = id => {
+    this.setState({
+      tasks: this.state.tasks.map(item => {
+        if (item.id === id) item.status = !item.status;
+        return item;
+      })
+    }, () => {
+      console.log('TodoList state:', this.state);
+    });
+  };
 
 }
