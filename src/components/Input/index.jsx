@@ -10,6 +10,7 @@ export class Input extends Component {
     return (
       <form onSubmit={ this.onFormSubmit } >
         <div className="input-group">
+
           <input type="text"
                  placeholder="What need to be done"
                  className="form-control"
@@ -17,6 +18,7 @@ export class Input extends Component {
                  onChange={ this.onChangeInput }
                  onKeyUp={ this.onPressEnter }
           />
+
           <div className="input-group-append">
             <input type="button"
                    value="Add"
@@ -24,9 +26,8 @@ export class Input extends Component {
                    onClick={ this.onPressButton }
             />
           </div>
+
         </div>
-
-
       </form>
     );
   }

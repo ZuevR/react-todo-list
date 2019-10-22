@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Input } from "../Input";
+import { List } from "../List";
+import './style.css';
 
 export class TodoList extends Component {
 
@@ -9,7 +11,10 @@ export class TodoList extends Component {
 
   render() {
     return (
-      <Input addTask={ this.addTask }/>
+      <div className="mt-4 todo-list-wrapper">
+        <Input addTask={ this.addTask }/>
+        <List/>
+      </div>
     );
   }
 
