@@ -5,8 +5,12 @@ import './App.css';
 function App() {
   return (
     <div className="container">
-      <h1 className="text-center title">Todo List</h1>
-      <TodoList/>
+      <h1 className="text-center display-3 title">Todo List</h1>
+      <div className="row justify-content-center">
+        <div className="mt-4 todo-list-wrapper">
+          <TodoList/>
+        </div>
+      </div>
     </div>
   );
 }

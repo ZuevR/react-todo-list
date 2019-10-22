@@ -8,23 +8,28 @@ export class Input extends Component {
 
   render() {
     return (
-      <form onSubmit={ this.onFormSubmit }>
+      <form onSubmit={ this.onFormSubmit } >
+        <div className="input-group">
+          <input type="text"
+                 placeholder="What need to be done"
+                 className="form-control"
+                 value={ this.state.inputText }
+                 onChange={ this.onChangeInput }
+                 onKeyUp={ this.onPressEnter }
+          />
+          <div className="input-group-append">
+            <input type="button"
+                   value="Add"
+                   className="btn btn-primary"
+                   onClick={ this.onPressButton }
+            />
+          </div>
+        </div>
 
-        <input type="text" placeholder="What need to be done"
-               value={ this.state.inputText }
-               onChange={ this.onChangeInput }
-               onKeyUp={ this.onPressEnter }
-        />
-
-        <input type="button" value="Add" onClick={ this.onPressButton }/>
 
       </form>
     );
   }
-
-  onFormSubmit = event => {
-    event.preventDefault();
-  };
 
   sanitizeInput = inputString => {
     return inputString.trim()
@@ -36,6 +41,10 @@ export class Input extends Component {
     this.setState({
       inputText: ''
     })
+  };
+
+  onFormSubmit = event => {
+    event.preventDefault();
   };
 
   onChangeInput = event => {
@@ -53,7 +62,7 @@ export class Input extends Component {
     }
   };
 
-  onPressButton = event => {
+  onPressButton = () => {
     const { addTask } = this.props;
     const inputText = this.sanitizeInput(this.state.inputText);
     if (inputText) {

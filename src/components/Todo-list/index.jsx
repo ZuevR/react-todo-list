@@ -25,7 +25,7 @@ export class TodoList extends Component {
       tasks: [...this.state.tasks, newTask]
     }, () => {
       console.log('TodoList state:', this.state);
-    })
+    });
   };
 
 }
