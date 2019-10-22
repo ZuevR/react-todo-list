@@ -6,14 +6,17 @@ import './style.css';
 export class TodoList extends Component {
 
   state = {
-    tasks: []
+    tasks: [
+      { id: 1, description: 'Hey', status: true },
+      { id: 2, description: 'Aga', status: false }
+    ]
   };
 
   render() {
     return (
       <div className="mt-4 todo-list-wrapper">
         <Input addTask={ this.addTask }/>
-        <List/>
+        { !!this.state.tasks.length && <List tasks={ this.state.tasks } removeTask={ this.removeTask }/> }
       </div>
     );
   }
@@ -32,5 +35,11 @@ export class TodoList extends Component {
       console.log('TodoList state:', this.state);
     });
   };
+
+  removeTask = id => {
+    this.setState({
+      tasks: this.state.tasks.filter(item => item.id !== id)
+    });
+  }
 
 }
