@@ -11,7 +11,7 @@ export class Task extends Component {
 
         <input type="checkbox"
                className="form-check-inline custom-input"
-               defaultChecked={ task.status }
+               checked={ task.status }
                onChange={ this.onInputChange }
         />
 
@@ -30,11 +30,11 @@ export class Task extends Component {
 
   onButtonClick = () => {
     const { task, removeTask } = this.props;
-    removeTask(task.id);
+    removeTask(task);
   };
 
   onInputChange = () => {
     const { task, toggleTask } = this.props;
-    toggleTask(task.id);
+    toggleTask(task);
   };
 }

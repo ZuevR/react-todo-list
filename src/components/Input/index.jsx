@@ -14,7 +14,7 @@ export class Input extends Component {
 
           <input type="text"
                  placeholder="What need to be done"
-                 className="form-control"
+                 className="form-control shadow-none"
                  value={ this.state.inputText }
                  onChange={ this.onChangeInput }
                  onKeyUp={ this.onPressEnter }
@@ -23,7 +23,7 @@ export class Input extends Component {
           <div className="input-group-append">
             <input type="button"
                    value="Add"
-                   className="btn btn-primary"
+                   className="btn btn-secondary shadow-none"
                    onClick={ this.onPressButton }
             />
           </div>

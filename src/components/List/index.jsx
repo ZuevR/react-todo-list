@@ -4,16 +4,24 @@ import './style.css';
 
 export class List extends Component {
 
+  state = {
+    count: 0
+  };
+
   render() {
     const { tasks, removeTask, toggleTask } = this.props;
+
     return (
       <div className="list">
         <ul className="list-group list-group-flush">
-          { tasks.map(item => (
-            <li key={ item.id } className="list-group-item d-flex align-items-center">
-              <Task task={ item } removeTask={ removeTask } toggleTask={ toggleTask }/>
-            </li>
-          )) }
+          {
+            tasks.map(item => (
+                <li key={ item.id } className="list-group-item d-flex align-items-center">
+                  <Task task={ item } removeTask={ removeTask } toggleTask={ toggleTask }/>
+                </li>
+              )
+            )
+          }
         </ul>
       </div>
     );
