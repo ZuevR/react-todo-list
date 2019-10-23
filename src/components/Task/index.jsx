@@ -18,13 +18,19 @@ export default class Task extends Component {
     return (
       <>
         <input
+          id={`task${task.id}`}
           type="checkbox"
           className="form-check-inline custom-input"
           checked={task.status}
           onChange={this.onCbxInputChange}
         />
 
-        <span>{task.description}</span>
+        <label
+          className={`form-check-label ${task.status ? 'del-text text-muted' : false}`}
+          htmlFor={`task${task.id}`}
+        >
+          {task.description}
+        </label>
 
         <button
           type="button"
