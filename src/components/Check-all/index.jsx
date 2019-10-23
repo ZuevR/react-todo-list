@@ -10,14 +10,14 @@ export default class CheckAll extends Component {
   };
 
   render() {
-    const { status } = this.props;
+    const { quantityOfLeftTasks } = this.props;
     return (
       <div className="form-group form-check mt-3 pl-5">
         <input
           id="check-all"
           className="form-check-input ca-checkbox"
           type="checkbox"
-          checked={status === 0}
+          checked={quantityOfLeftTasks === 0}
           onChange={this.onCbxClick}
         />
         <label htmlFor="check-all" className="form-check-label text-secondary custom-label">
@@ -30,5 +30,5 @@ export default class CheckAll extends Component {
 
 CheckAll.propTypes = {
   toggleAllTasks: PropTypes.func.isRequired,
-  status: PropTypes.bool.isRequired,
+  quantityOfLeftTasks: PropTypes.number.isRequired,
 };

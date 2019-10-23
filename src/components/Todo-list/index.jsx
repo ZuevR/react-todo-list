@@ -82,17 +82,35 @@ export default class TodoList extends PureComponent {
     });
   };
 
+  removeCompletedTasks = () => {
+    const { tasks, counters } = this.state;
+    this.setState({
+      tasks: tasks.filter((item) => !item.status),
+      counters: {
+        active: counters.active,
+        done: 0,
+      },
+    });
+  };
+
   render() {
     const { tasks, counters, filter } = this.state;
     const renderFlag = !!tasks.length;
     return (
       <div className="mt-4 todo-list-wrapper">
         <Input addTask={this.addTask} />
-        {renderFlag && (<CheckAll toggleAllTasks={this.toggleAllTasks} status={counters.active} />)}
+        {renderFlag && (
+          <CheckAll toggleAllTasks={this.toggleAllTasks} quantityOfLeftTasks={counters.active} />)}
         {renderFlag && (
           <List tasks={tasks} removeTask={this.removeTask} toggleTask={this.toggleTaskStatus} />)}
         {renderFlag && (
-          <ListFooter filter={filter} counters={counters} setFilter={this.setFilter} />)}
+          <ListFooter
+            filter={filter}
+            counters={counters}
+            setFilter={this.setFilter}
+            removeCompletedTasks={this.removeCompletedTasks}
+          />
+        )}
       </div>
     );
   }

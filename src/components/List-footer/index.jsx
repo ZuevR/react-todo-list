@@ -9,6 +9,11 @@ export default class ListFooter extends Component {
     setFilter(type);
   };
 
+  onClickDeleteButton = (event) => {
+    const { removeCompletedTasks } = this.props;
+    console.log(event);
+  };
+
   render() {
     const btnClassName = 'btn btn-sm shadow-none py-0';
     const { filter, counters } = this.props;
@@ -55,7 +60,9 @@ export default class ListFooter extends Component {
             </button>
           </div>
 
-          <div className="del-btn text-muted col-4">Delete completed</div>
+          <div className="del-btn text-muted col-4" onClick={this.onClickDeleteButton}>
+            Delete completed
+          </div>
 
         </div>
       </div>
@@ -66,5 +73,6 @@ export default class ListFooter extends Component {
 ListFooter.propTypes = {
   setFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
-  counters: PropTypes.objectOf(PropTypes.number).isRequired,
+  removeCompletedTasks: PropTypes.func.isRequired,
+  counters: PropTypes.objectOf(PropTypes.any).isRequired,
 };
