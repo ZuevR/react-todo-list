@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import './style.css';
 
-export class CheckAll extends Component {
+export default class CheckAll extends Component {
+  onCbxClick = (event) => {
+    const { toggleAllTasks } = this.props;
+    const status = event.target.checked;
+    toggleAllTasks(status);
+  };
 
   render() {
     const { status } = this.props;
@@ -16,11 +21,5 @@ export class CheckAll extends Component {
         <label htmlFor="check-all" className="form-check-label text-secondary custom-label">Complete all</label>
       </div>
     );
-  }
-
-  onCbxClick = event => {
-    const { toggleAllTasks } = this.props;
-    const status = event.target.checked;
-    toggleAllTasks(status);
   }
 }

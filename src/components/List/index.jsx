@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Task } from "../Task";
+import { Task } from '../Task';
 import './style.css';
 
 export class List extends Component {
@@ -16,8 +16,8 @@ export class List extends Component {
         <ul className="list-group list-group-flush">
           {
             tasks.map(item => (
-                <li key={ item.id } className="list-group-item d-flex align-items-center">
-                  <Task task={ item } removeTask={ removeTask } toggleTask={ toggleTask }/>
+                <li key={item.id} className="list-group-item d-flex align-items-center">
+                  <Task task={item} removeTask={removeTask} toggleTask={toggleTask}/>
                 </li>
               )
             )
