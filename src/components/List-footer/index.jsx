@@ -9,9 +9,9 @@ export default class ListFooter extends Component {
     setFilter(type);
   };
 
-  onClickDeleteButton = (event) => {
+  onClickDeleteButton = () => {
     const { removeCompletedTasks } = this.props;
-    console.log(event);
+    removeCompletedTasks();
   };
 
   render() {
@@ -60,9 +60,18 @@ export default class ListFooter extends Component {
             </button>
           </div>
 
-          <div className="del-btn text-muted col-4" onClick={this.onClickDeleteButton}>
-            Delete completed
-          </div>
+          {
+            counters.done !== 0
+            && (
+            <div
+              role="none"
+              className="del-btn text-muted col-4"
+              onClick={this.onClickDeleteButton}
+            >
+              Delete completed
+            </div>
+            )
+          }
 
         </div>
       </div>

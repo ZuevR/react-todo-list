@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import './style.css';
 
 export default class Task extends Component {
-  onButtonClick = () => {
+  onCloseButtonClick = () => {
     const { task, removeTask } = this.props;
     removeTask(task);
   };
 
-  onInputChange = () => {
+  onCbxInputChange = () => {
     const { task, toggleTask } = this.props;
     toggleTask(task);
   };
@@ -21,7 +21,7 @@ export default class Task extends Component {
           type="checkbox"
           className="form-check-inline custom-input"
           checked={task.status}
-          onChange={this.onInputChange}
+          onChange={this.onCbxInputChange}
         />
 
         <span>{task.description}</span>
@@ -29,7 +29,7 @@ export default class Task extends Component {
         <button
           type="button"
           className="btn close shadow-none ml-auto"
-          onClick={this.onButtonClick}
+          onClick={this.onCloseButtonClick}
         >
           <span aria-hidden="true">&times;</span>
         </button>

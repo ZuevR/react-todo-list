@@ -87,7 +87,7 @@ export default class TodoList extends PureComponent {
     this.setState({
       tasks: tasks.filter((item) => !item.status),
       counters: {
-        active: counters.active,
+        ...counters,
         done: 0,
       },
     });
@@ -102,7 +102,13 @@ export default class TodoList extends PureComponent {
         {renderFlag && (
           <CheckAll toggleAllTasks={this.toggleAllTasks} quantityOfLeftTasks={counters.active} />)}
         {renderFlag && (
-          <List tasks={tasks} removeTask={this.removeTask} toggleTask={this.toggleTaskStatus} />)}
+          <List
+            tasks={tasks}
+            removeTask={this.removeTask}
+            toggleTask={this.toggleTaskStatus}
+            filter={filter}
+          />
+        )}
         {renderFlag && (
           <ListFooter
             filter={filter}
