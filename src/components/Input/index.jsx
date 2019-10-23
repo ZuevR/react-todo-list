@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ENTER_KEY_CODE } from "../../constants";
 
 export class Input extends Component {
 
@@ -57,7 +58,7 @@ export class Input extends Component {
   onPressEnter = event => {
     const { addTask } = this.props;
     const inputText = this.sanitizeInput(this.state.inputText);
-    if (event.nativeEvent.which === 13 && inputText) {
+    if (event.nativeEvent.which === ENTER_KEY_CODE && inputText) {
       addTask(inputText);
       this.clearInput();
     }

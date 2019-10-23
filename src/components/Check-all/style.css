@@ -1,0 +1,8 @@
+.ca-checkbox:hover {
+  cursor: pointer;
+}
+
+.custom-label:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
