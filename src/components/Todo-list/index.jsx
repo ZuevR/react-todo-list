@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Input } from '../Input';
-import { List } from '../List';
+import Input from '../Input';
+import List from '../List';
 import CheckAll from '../Check-all';
-import { ListFooter } from '../List-footer';
+import ListFooter from '../List-footer';
 import './style.css';
 
 export default class TodoList extends PureComponent {

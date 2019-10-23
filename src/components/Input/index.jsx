@@ -1,30 +1,74 @@
 import React, { Component } from 'react';
-import { ENTER_KEY_CODE } from "../../constants";
+import PropTypes from 'prop-types';
+import { ENTER_KEY_CODE } from '../../constants';
 
-export class Input extends Component {
+export default class Input extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputText: '',
+    };
+  }
 
-  state = {
-    inputText: ''
+  sanitizeInput = (inputString) => inputString.trim()
+    .replace(/</g, '&#60')
+    .replace(/>/g, '&#62');
+
+  clearInput = () => {
+    this.setState({
+      inputText: '',
+    });
+  };
+
+  onFormSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  onChangeInput = (event) => {
+    this.setState({
+      inputText: event.target.value,
+    });
+  };
+
+  onPressEnter = (event) => {
+    let { inputText } = this.state;
+    const { addTask } = this.props;
+    inputText = this.sanitizeInput(inputText);
+    if (!(event.nativeEvent.which === ENTER_KEY_CODE) || !inputText) return;
+    addTask(inputText);
+    this.clearInput();
+  };
+
+  onClickAddButton = () => {
+    let { inputText } = this.state;
+    const { addTask } = this.props;
+    inputText = this.sanitizeInput(inputText);
+    if (!inputText) return;
+    addTask(inputText);
+    this.clearInput();
   };
 
   render() {
+    const { inputText } = this.state;
     return (
-      <form onSubmit={ this.onFormSubmit } >
+      <form onSubmit={this.onFormSubmit}>
         <div className="input-group">
 
-          <input type="text"
-                 placeholder="What need to be done"
-                 className="form-control shadow-none"
-                 value={ this.state.inputText }
-                 onChange={ this.onChangeInput }
-                 onKeyUp={ this.onPressEnter }
+          <input
+            type="text"
+            placeholder="What need to be done"
+            className="form-control shadow-none"
+            value={inputText}
+            onChange={this.onChangeInput}
+            onKeyUp={this.onPressEnter}
           />
 
           <div className="input-group-append">
-            <input type="button"
-                   value="Add"
-                   className="btn btn-secondary shadow-none"
-                   onClick={ this.onPressButton }
+            <input
+              type="button"
+              value="Add"
+              className="btn btn-secondary shadow-none"
+              onClick={this.onClickAddButton}
             />
           </div>
 
@@ -32,44 +76,8 @@ export class Input extends Component {
       </form>
     );
   }
-
-  sanitizeInput = inputString => {
-    return inputString.trim()
-      .replace(/</g, '&#60')
-      .replace(/>/g, '&#62');
-  };
-
-  clearInput = () => {
-    this.setState({
-      inputText: ''
-    })
-  };
-
-  onFormSubmit = event => {
-    event.preventDefault();
-  };
-
-  onChangeInput = event => {
-    this.setState({
-      inputText: event.target.value
-    });
-  };
-
-  onPressEnter = event => {
-    const { addTask } = this.props;
-    const inputText = this.sanitizeInput(this.state.inputText);
-    if (event.nativeEvent.which === ENTER_KEY_CODE && inputText) {
-      addTask(inputText);
-      this.clearInput();
-    }
-  };
-
-  onPressButton = () => {
-    const { addTask } = this.props;
-    const inputText = this.sanitizeInput(this.state.inputText);
-    if (inputText) {
-      addTask(inputText);
-      this.clearInput();
-    }
-  };
 }
+
+Input.propTypes = {
+  addTask: PropTypes.func.isRequired,
+};
