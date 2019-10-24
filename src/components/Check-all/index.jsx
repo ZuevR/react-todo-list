@@ -12,7 +12,7 @@ export default class CheckAll extends Component {
   render() {
     const { quantityOfLeftTasks } = this.props;
     return (
-      <=div className="form-group form-check mt-3 pl-5">
+      <div className="form-group form-check mt-3 pl-5">
         <label htmlFor="check-all" className="form-check-label text-secondary custom-label">
           <input
             id="check-all"
