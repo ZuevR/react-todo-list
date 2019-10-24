@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export default class SignUp extends Component {
+export default class SignIn extends Component {
   some = () => undefined;
 
   render() {
     return (
-      <h1>Sign Up Page</h1>
+      <h1>Sign In Page</h1>
     );
   }
 }
