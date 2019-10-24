@@ -12,15 +12,15 @@ export default class CheckAll extends Component {
   render() {
     const { quantityOfLeftTasks } = this.props;
     return (
-      <div className="form-group form-check mt-3 pl-5">
-        <input
-          id="check-all"
-          className="form-check-input ca-checkbox"
-          type="checkbox"
-          checked={quantityOfLeftTasks === 0}
-          onChange={this.onCbxClick}
-        />
+      <=div className="form-group form-check mt-3 pl-5">
         <label htmlFor="check-all" className="form-check-label text-secondary custom-label">
+          <input
+            id="check-all"
+            className="form-check-input ca-checkbox"
+            type="checkbox"
+            checked={quantityOfLeftTasks === 0}
+            onChange={this.onCbxClick}
+          />
           Complete all
         </label>
       </div>

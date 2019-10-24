@@ -12,9 +12,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "eslint": "eslint ./src/**/*.jsx",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "pre-push": ["eslint"],
   "eslintConfig": {
     "extends": "react-app"
   },
