@@ -57,13 +57,14 @@ export default class TodoList extends PureComponent {
     this.setState({
       tasks: tasks.map((item) => {
         if (item.id === task.id) {
-          item.status = !item.status;
+          const status = !item.status;
+          return { ...item, status };
         }
         return item;
       }),
       counters: {
-        active: task.status ? counters.active - 1 : counters.active + 1,
-        done: task.status ? counters.done + 1 : counters.done - 1,
+        active: task.status ? counters.active + 1 : counters.active - 1,
+        done: task.status ? counters.done - 1 : counters.done + 1,
       },
     });
   };
@@ -71,10 +72,7 @@ export default class TodoList extends PureComponent {
   toggleAllTasks = (status) => {
     const { tasks } = this.state;
     this.setState({
-      tasks: tasks.map((item) => {
-        item.status = status;
-        return item;
-      }),
+      tasks: tasks.map((item) => ({ ...item, status })),
       counters: {
         active: status ? 0 : tasks.length,
         done: status ? tasks.length : 0,

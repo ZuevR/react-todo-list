@@ -30,7 +30,7 @@ export default class Input extends Component {
     });
   };
 
-  onPressEnter = (event) => {
+  onNewTaskInputKeyUp = (event) => {
     let { inputText } = this.state;
     const { addTask } = this.props;
     inputText = this.sanitizeInput(inputText);
@@ -60,7 +60,7 @@ export default class Input extends Component {
             className="form-control shadow-none"
             value={inputText}
             onChange={this.onChangeInput}
-            onKeyUp={this.onPressEnter}
+            onKeyUp={this.onNewTaskInputKeyUp}
           />
 
           <div className="input-group-append">
