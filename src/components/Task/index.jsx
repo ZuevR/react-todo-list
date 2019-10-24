@@ -93,6 +93,7 @@ export default class Task extends Component {
           <input
             type="text"
             className="form-control shadow-none"
+            defaultValue={task.description}
             ref={(input) => {
               this.editInput = input;
             }}
