@@ -18,6 +18,10 @@ export default class TodoList extends PureComponent {
     };
   }
 
+  sanitizeString = (value) => value.trim()
+    .replace(/</g, '&#60')
+    .replace(/>/g, '&#62');
+
   setFilter = (filterType) => {
     this.setState({
       filter: filterType,
@@ -91,6 +95,16 @@ export default class TodoList extends PureComponent {
     });
   };
 
+  updateTask = async (task, inputValue) => {
+    const { tasks } = this.state;
+    const description = this.sanitizeString(inputValue);
+    if (!description) return false;
+    await this.setState({
+      tasks: tasks.map((item) => (item.id === task.id ? { ...item, description } : item)),
+    });
+    return true;
+  };
+
   render() {
     const { tasks, counters, filter } = this.state;
     const renderFlag = !!tasks.length;
@@ -104,6 +118,7 @@ export default class TodoList extends PureComponent {
             tasks={tasks}
             removeTask={this.removeTask}
             toggleTask={this.toggleTaskStatus}
+            updateTask={this.updateTask}
             filter={filter}
           />
         )}

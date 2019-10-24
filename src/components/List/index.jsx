@@ -16,19 +16,26 @@ export default class List extends Component {
     }
   };
 
+  renderTasksList = () => {
+    const { removeTask, toggleTask, updateTask } = this.props;
+    const taskArray = this.getTaskArray();
+    return taskArray.map((item) => (
+      <li key={item.id} className="list-group-item d-flex align-items-center">
+        <Task
+          task={item}
+          removeTask={removeTask}
+          toggleTask={toggleTask}
+          updateTask={updateTask}
+        />
+      </li>
+    ));
+  };
+
   render() {
-    const { removeTask, toggleTask } = this.props;
     return (
       <div className="list">
         <ul className="list-group list-group-flush">
-          {
-            this.getTaskArray()
-              .map((item) => (
-                <li key={item.id} className="list-group-item d-flex align-items-center">
-                  <Task task={item} removeTask={removeTask} toggleTask={toggleTask} />
-                </li>
-              ))
-          }
+          {this.renderTasksList()}
         </ul>
       </div>
     );
@@ -39,5 +46,6 @@ List.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   removeTask: PropTypes.func.isRequired,
   toggleTask: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };

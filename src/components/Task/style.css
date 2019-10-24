@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'fontello';
+  src: url('../../fonts/fontello.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon-pencil {
+  font-family: 'fontello';
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+.icon-pencil:before { content: '\e800'; }
+
 .custom-input {
   width: 20px;
   height: 20px;
@@ -6,4 +21,14 @@
 
 .del-text {
   text-decoration: line-through;
+}
+
+.task-text {
+  width: 100%;
+  cursor: pointer;
+}
+
+
+.hidden {
+  display: none!important;
 }
