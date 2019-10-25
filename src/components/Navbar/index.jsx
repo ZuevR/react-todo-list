@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import s from './style.module.css';
 import logo from '../../assets/images/site-logo.png';
+
+const activeStyle = {
+  color: '#ffffff',
+  textDecoration: 'underline',
+};
 
 export default class Navbar extends Component {
   constructor(props) {
@@ -30,16 +36,16 @@ export default class Navbar extends Component {
             className="navbar-brand d-none d-md-block"
             rel="noopener noreferrer"
           >
-            <img src={logo} className="site-logo" alt="logo" />
+            <img src={logo} className={s.logo} alt="logo" />
           </a>
           <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
             <li className="nav-item mx-1">
-              <NavLink to="/sign-up" className="nav-link app-link" activeClassName="active-link">
+              <NavLink to="/sign-up" className="nav-link app-link" activeStyle={activeStyle}>
                 Sign up
               </NavLink>
             </li>
             <li className="nav-item mx-1">
-              <NavLink to="/sign-in" className="nav-link app-link" activeClassName="active-link">
+              <NavLink to="/sign-in" className="nav-link app-link" activeStyle={activeStyle}>
                 Sign in
               </NavLink>
             </li>
