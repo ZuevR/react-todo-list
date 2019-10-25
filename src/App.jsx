@@ -11,7 +11,7 @@ function App() {
     <>
       <Header />
       <div className="container">
-        <h1 className="text-center display-3 title">Todo List</h1>
+        {/* <h1 className="text-center display-3 title">Todo List</h1> */}
         <div className="row justify-content-center">
           <Route exact path="/"><TodoList /></Route>
           <Route path="/sign-up"><SignUp /></Route>
