@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Navbar from '../../components/Navbar';
 
-const Layout = ({ children }) => {
-  return (
-    <div>
+const Layout = ({ children }) => (
+  <div>
+    <Navbar />
 
-
-      <main>
-        {children}
-      </main>
-    </div>
-  );
-};
+    <main>
+      {children}
+    </main>
+  </div>
+);
 
 Layout.propTypes = {
   children: PropTypes.oneOfType([

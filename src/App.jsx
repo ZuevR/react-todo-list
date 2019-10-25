@@ -10,7 +10,7 @@ import './App.css';
 function App() {
   return (
     <Layout>
-      <div style={{ width: 400, border: '2px solid' }}>Test</div>
+      <div style={{ width: 200, border: '2px solid' }}>Test</div>
     </Layout>
   );
 }
