@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react';
 import Validator from '../../Validator/Validator';
-import './style.css';
+import s from './style.module.css';
+
+const errorInput = {
+  backgroundImage: 'none',
+};
 
 export default class SignUp extends PureComponent {
   constructor(props) {
@@ -29,7 +33,6 @@ export default class SignUp extends PureComponent {
   }
 
   /* ========= Handlers ========= */
-
   onFormInputFocus = (event) => {
     const { name, value } = event.target;
     this.checkValidation(name, value);
@@ -57,7 +60,6 @@ export default class SignUp extends PureComponent {
   };
 
   /* ========= Validation ========= */
-
   checkValidation = (input, value) => {
     switch (input) {
       case 'name': return this.validateName(value);
@@ -125,7 +127,6 @@ export default class SignUp extends PureComponent {
   };
 
   /* ========= Other ========= */
-
   onFormSubmit = (event) => {
     event.preventDefault();
   };
@@ -142,7 +143,7 @@ export default class SignUp extends PureComponent {
         <div className="row justify-content-center">
           <div className="form-wrapper col-xl-4 col-lg-5 col-md-7 col-sm-9 col-xs-12">
             <h1 className="text-center mt-5">Registration form</h1>
-            <form className="mt-5 app-form" onSubmit={this.onFormSubmit}>
+            <form className={`${s.form} mt-5`} onSubmit={this.onFormSubmit}>
               <div className="form-group row">
                 <label htmlFor="name" className="col-sm-3 col-form-label">Name</label>
                 <div className="col-sm-9">
@@ -150,7 +151,8 @@ export default class SignUp extends PureComponent {
                     type="text"
                     name="name"
                     id="name"
-                    className={`form-control ${name.blurred && !name.valid ? 'is-invalid error-input' : false}`}
+                    className={`form-control ${name.blurred && !name.valid ? 'is-invalid' : false}`}
+                    style={errorInput}
                     value={name.value}
                     onFocus={this.onFormInputFocus}
                     onChange={this.onFormInputChange}
@@ -165,7 +167,8 @@ export default class SignUp extends PureComponent {
                   <input
                     type="email"
                     name="email"
-                    className={`form-control ${email.blurred && !email.valid ? 'is-invalid error-input' : false}`}
+                    className={`form-control ${email.blurred && !email.valid ? 'is-invalid' : false}`}
+                    style={errorInput}
                     id="email"
                     value={email.value}
                     onFocus={this.onFormInputFocus}
@@ -181,7 +184,8 @@ export default class SignUp extends PureComponent {
                   <input
                     type="password"
                     name="password"
-                    className={`form-control ${password.blurred && !password.valid ? 'is-invalid error-input' : false}`}
+                    className={`form-control ${password.blurred && !password.valid ? 'is-invalid' : false}`}
+                    style={errorInput}
                     id="password"
                     value={password.value}
                     onFocus={this.onFormInputFocus}
