@@ -8,68 +8,31 @@ export default class SignUp extends PureComponent {
     this.state = {
       name: {
         value: '',
-        error: false,
+        valid: false,
+        blurred: false,
+        errorMessage: false,
       },
       email: {
         value: '',
-        error: false,
+        valid: false,
+        blurred: false,
+        errorMessage: false,
       },
       password: {
         value: '',
-        error: false,
+        valid: false,
+        blurred: false,
+        errorMessage: false,
       },
+      isFormValid: false,
     };
   }
 
-  setErrorMessage = (field, message) => {
-    this.setState((prevState) => ({
-      [field]: {
-        ...prevState[field],
-        error: message,
-      },
-    }), () => {
-      console.log(this.state);
-    });
-  };
+  /* ========= Handlers ========= */
 
-  validateInput = (input) => {
-    const { state } = this;
-    switch (input) {
-      case 'name': {
-        if (Validator.required(state[input].value)) {
-          this.setErrorMessage(input, 'The name is required');
-          break;
-        }
-        this.setErrorMessage(input, '');
-        break;
-      }
-      case 'email': {
-        if (Validator.required(state[input].value)) {
-          this.setErrorMessage(input, 'The email is required');
-          break;
-        }
-        if (Validator.isEmail(state[input].value)) {
-          this.setErrorMessage(input, 'Incorrect email');
-          break;
-        }
-        this.setErrorMessage(input, '');
-        break;
-      }
-      case 'password': {
-        if (Validator.required(state[input].value)) {
-          this.setErrorMessage(input, 'The password is required');
-          break;
-        }
-        if (Validator.minLength(state[input].value, 6)) {
-          this.setErrorMessage(input, 'The password should contain 6 characters at least');
-          break;
-        }
-        this.setErrorMessage(input, '');
-        break;
-      }
-      default:
-        state[input].error = false;
-    }
+  onFormInputFocus = (event) => {
+    const { name, value } = event.target;
+    this.checkValidation(name, value);
   };
 
   onFormInputChange = (event) => {
@@ -77,28 +40,103 @@ export default class SignUp extends PureComponent {
     this.setState((prevState) => ({
       [name]: {
         ...prevState[name],
+        blurred: false,
         value,
+      },
+    }));
+    this.checkValidation(name, value);
+  };
+
+  onFormInputBlur = (input) => {
+    this.setState((prevState) => ({
+      [input]: {
+        ...prevState[input],
+        blurred: true,
       },
     }));
   };
 
-  isFormValid = () => {
-    const { state } = this;
-    const errorFields = Object.keys(state);
-    for (let i = 0; i < errorFields.length; i += 1) {
-      if (state[errorFields[i].error] !== '') return false;
+  /* ========= Validation ========= */
+
+  checkValidation = (input, value) => {
+    switch (input) {
+      case 'name': return this.validateName(value);
+      case 'email': return this.validateEmail(value);
+      case 'password': return this.validatePassword(value);
+      default: return false;
     }
-    return true;
   };
+
+  validateName = (value) => {
+    let message = false;
+    if (Validator.required(value)) message = 'The name is required';
+    this.setState((prevState) => ({
+      name: {
+        ...prevState.name,
+        errorMessage: message,
+        valid: !message,
+      },
+    }), () => {
+      this.checkSubmit();
+    });
+  };
+
+  validateEmail = (value) => {
+    let message = false;
+    if (Validator.required(value)) {
+      message = 'The email is required';
+    } else if (Validator.isEmail(value)) {
+      message = 'Incorrect Email';
+    }
+    this.setState((prevState) => ({
+      email: {
+        ...prevState.email,
+        errorMessage: message,
+        valid: !message,
+      },
+    }), () => {
+      this.checkSubmit();
+    });
+  };
+
+  validatePassword = (value) => {
+    let message = false;
+    if (Validator.required(value)) {
+      message = 'The password is required';
+    } else if (Validator.minLength(value, 6)) {
+      message = 'The password should contain 6 characters at least';
+    }
+    this.setState((prevState) => ({
+      password: {
+        ...prevState.password,
+        errorMessage: message,
+        valid: !message,
+      },
+    }), () => {
+      this.checkSubmit();
+    });
+  };
+
+  checkSubmit = () => {
+    const { name, email, password } = this.state;
+    this.setState({
+      isFormValid: name.valid && email.valid && password.valid,
+    });
+  };
+
+  /* ========= Other ========= */
 
   onFormSubmit = (event) => {
     event.preventDefault();
-    console.log(this.isFormValid());
   };
 
   render() {
-    console.log('render');
-    const { email, name, password } = this.state;
+    const {
+      email,
+      name,
+      password,
+      isFormValid,
+    } = this.state;
     return (
       <div className="container">
         <div className="row justify-content-center">
@@ -112,12 +150,13 @@ export default class SignUp extends PureComponent {
                     type="text"
                     name="name"
                     id="name"
-                    className={`form-control ${name.error ? 'is-invalid error-input' : false}`}
+                    className={`form-control ${name.blurred && !name.valid ? 'is-invalid error-input' : false}`}
                     value={name.value}
+                    onFocus={this.onFormInputFocus}
                     onChange={this.onFormInputChange}
-                    onBlur={this.validateInput.bind(null, 'name')}
+                    onBlur={this.onFormInputBlur.bind(null, 'name')}
                   />
-                  <div className="invalid-feedback">{name.error}</div>
+                  <div className="invalid-feedback">{name.errorMessage}</div>
                 </div>
               </div>
               <div className="form-group row">
@@ -126,14 +165,14 @@ export default class SignUp extends PureComponent {
                   <input
                     type="email"
                     name="email"
-                    className={`form-control ${email.error ? 'is-invalid error-input' : false}`}
+                    className={`form-control ${email.blurred && !email.valid ? 'is-invalid error-input' : false}`}
                     id="email"
                     value={email.value}
-                    // onFocus={this.setErrors.bind(null, 'email', email.value)}
+                    onFocus={this.onFormInputFocus}
                     onChange={this.onFormInputChange}
-                    onBlur={this.validateInput.bind(null, 'email')}
+                    onBlur={this.onFormInputBlur.bind(null, 'email')}
                   />
-                  {email.error && <div className="invalid-feedback">{email.error}</div>}
+                  <div className="invalid-feedback">{email.errorMessage}</div>
                 </div>
               </div>
               <div className="form-group row">
@@ -142,19 +181,20 @@ export default class SignUp extends PureComponent {
                   <input
                     type="password"
                     name="password"
-                    className={`form-control ${password.error ? 'is-invalid error-input' : false}`}
+                    className={`form-control ${password.blurred && !password.valid ? 'is-invalid error-input' : false}`}
                     id="password"
                     value={password.value}
-                    // onFocus={this.setErrors.bind(null, 'password', password.value)}
+                    onFocus={this.onFormInputFocus}
                     onChange={this.onFormInputChange}
-                    onBlur={this.validateInput.bind(null, 'password')}
+                    onBlur={this.onFormInputBlur.bind(null, 'password')}
                   />
-                  {password.error && <div className="invalid-feedback">{password.error}</div>}
+                  <div className="invalid-feedback">{password.errorMessage}</div>
                 </div>
               </div>
               <button
                 type="submit"
                 className="btn btn-secondary mt-3"
+                disabled={!isFormValid}
               >
                 Submit
               </button>
