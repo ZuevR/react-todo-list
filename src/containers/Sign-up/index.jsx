@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Index from '../../utils/validator';
 import s from './style.module.css';
-import { API_URL } from '../../constants';
 import AuthService from '../../auth';
 
 const errorInput = {
@@ -144,18 +142,15 @@ export default class SignUp extends PureComponent {
   };
 
   onFormSubmit = async (event) => {
-    const { name, email, password } = this.state;
     event.preventDefault();
+    const { name, email, password } = this.state;
+    const data = {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    };
     try {
-      const response = await axios({
-        method: 'POST',
-        url: `${API_URL}/auth/sign-up`,
-        data: {
-          name: name.value,
-          email: email.value,
-          password: password.value,
-        },
-      });
+      const response = await AuthService.signUp(data);
       AuthService.setToken(response.data);
     } catch (error) {
       const errorMessage = error.response.data.message || 'something broke';

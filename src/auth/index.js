@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { API_URL } from '../constants';
+
 export default class AuthService {
   static get token() {
     const expDate = new Date(localStorage.getItem('token-exp'));
@@ -21,4 +24,28 @@ export default class AuthService {
   static isAuth() {
     return !!AuthService.token;
   }
+
+  static signUp(formData) {
+    return axios({
+      method: 'POST',
+      url: `${API_URL}/auth/sign-up`,
+      data: {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      },
+    });
+  }
+
+  static signIn(formData) {
+    return axios({
+      method: 'POST',
+      url: `${API_URL}/auth/sign-in`,
+      data: {
+        email: formData.email,
+        password: formData.password,
+      },
+    });
+  }
+
 }
