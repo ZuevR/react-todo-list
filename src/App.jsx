@@ -1,8 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import TodoList from './components/Todo-list';
 import SignUp from './containers/Sign-up';
-import Header from './components/Header';
 import SignIn from './containers/Sign-in';
 import Layout from './hoc/Layout';
 import './App.css';

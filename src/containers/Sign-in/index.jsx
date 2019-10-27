@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Validator from '../../Validator/Validator';
+import Index from '../../Validator';
 import s from './style.module.css';
 
 const errorInput = {
@@ -64,7 +64,7 @@ export default class SignIn extends Component {
 
   validateEmail = (value) => {
     let message = false;
-    if (Validator.required(value)) message = 'The email is required';
+    if (Index.required(value)) message = 'The email is required';
     this.setState((prevState) => ({
       email: {
         ...prevState.email,
@@ -78,7 +78,7 @@ export default class SignIn extends Component {
 
   validatePassword = (value) => {
     let message = false;
-    if (Validator.required(value)) message = 'The password is required';
+    if (Index.required(value)) message = 'The password is required';
     this.setState((prevState) => ({
       password: {
         ...prevState.password,

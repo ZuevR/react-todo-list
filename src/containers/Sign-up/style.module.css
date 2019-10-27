@@ -1,5 +1,10 @@
 .form {
-  padding: 25px;
+  padding: 10px 35px;
   box-shadow: 0 0 5px 2px #d9d9d9;
   border-radius: 3px;
 }
+
+.errorBlock {
+  min-height: 32px;
+}
+

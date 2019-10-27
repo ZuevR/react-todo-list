@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
-import Validator from '../../Validator/Validator';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import Index from '../../Validator';
 import s from './style.module.css';
+import { API_URL } from '../../constants';
 
 const errorInput = {
   backgroundImage: 'none',
@@ -29,6 +32,7 @@ export default class SignUp extends PureComponent {
         errorMessage: false,
       },
       isFormValid: false,
+      formError: false,
     };
   }
 
@@ -46,6 +50,7 @@ export default class SignUp extends PureComponent {
         blurred: false,
         value,
       },
+      formError: false,
     }));
     this.checkValidation(name, value);
   };
@@ -62,16 +67,20 @@ export default class SignUp extends PureComponent {
   /* ========= Validation ========= */
   checkValidation = (input, value) => {
     switch (input) {
-      case 'name': return this.validateName(value);
-      case 'email': return this.validateEmail(value);
-      case 'password': return this.validatePassword(value);
-      default: return false;
+      case 'name':
+        return this.validateName(value);
+      case 'email':
+        return this.validateEmail(value);
+      case 'password':
+        return this.validatePassword(value);
+      default:
+        return false;
     }
   };
 
   validateName = (value) => {
     let message = false;
-    if (Validator.required(value)) message = 'The name is required';
+    if (Index.required(value)) message = 'The name is required';
     this.setState((prevState) => ({
       name: {
         ...prevState.name,
@@ -85,9 +94,9 @@ export default class SignUp extends PureComponent {
 
   validateEmail = (value) => {
     let message = false;
-    if (Validator.required(value)) {
+    if (Index.required(value)) {
       message = 'The email is required';
-    } else if (Validator.isEmail(value)) {
+    } else if (Index.isEmail(value)) {
       message = 'Incorrect Email';
     }
     this.setState((prevState) => ({
@@ -103,9 +112,9 @@ export default class SignUp extends PureComponent {
 
   validatePassword = (value) => {
     let message = false;
-    if (Validator.required(value)) {
+    if (Index.required(value)) {
       message = 'The password is required';
-    } else if (Validator.minLength(value, 6)) {
+    } else if (Index.minLength(value, 6)) {
       message = 'The password should contain 6 characters at least';
     }
     this.setState((prevState) => ({
@@ -127,8 +136,30 @@ export default class SignUp extends PureComponent {
   };
 
   /* ========= Other ========= */
-  onFormSubmit = (event) => {
+  setFormError = (message) => {
+    this.setState({
+      formError: message,
+    });
+  };
+
+  onFormSubmit = async (event) => {
+    const { name, email, password } = this.state;
     event.preventDefault();
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: `${API_URL}/auth/sign-up`,
+        data: {
+          name: name.value,
+          email: email.value,
+          password: password.value,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      const errorMessage = error.response.data.message;
+      this.setFormError(errorMessage);
+    }
   };
 
   render() {
@@ -137,6 +168,7 @@ export default class SignUp extends PureComponent {
       name,
       password,
       isFormValid,
+      formError,
     } = this.state;
     return (
       <div className="container">
@@ -144,7 +176,10 @@ export default class SignUp extends PureComponent {
           <div className="form-wrapper col-xl-4 col-lg-5 col-md-7 col-sm-9 col-xs-12">
             <h1 className="text-center mt-5">Registration form</h1>
             <form className={`${s.form} mt-5`} onSubmit={this.onFormSubmit}>
-              <div className="form-group row">
+              <div className={s.errorBlock}>
+                {formError && <div className="text-center text-light bg-danger p-1">{formError}</div>}
+              </div>
+              <div className="form-group row mt-2">
                 <label htmlFor="name" className="col-sm-3 col-form-label">Name</label>
                 <div className="col-sm-9">
                   <input
@@ -202,6 +237,9 @@ export default class SignUp extends PureComponent {
               >
                 Submit
               </button>
+              <Link to="/sign-in">
+                <div className="mt-4 text-muted text-center">Already have account?</div>
+              </Link>
             </form>
           </div>
         </div>
