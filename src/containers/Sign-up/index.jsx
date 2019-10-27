@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Index from '../../Validator';
 import s from './style.module.css';
 import { API_URL } from '../../constants';
+import AuthService from '../../auth';
 
 const errorInput = {
   backgroundImage: 'none',
@@ -155,9 +156,9 @@ export default class SignUp extends PureComponent {
           password: password.value,
         },
       });
-      console.log(response);
+      AuthService.setToken(response.data);
     } catch (error) {
-      const errorMessage = error.response.data.message;
+      const errorMessage = error.response.data.message || 'something broke';
       this.setFormError(errorMessage);
     }
   };
