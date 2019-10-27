@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import Input from '../Input';
-import List from '../List';
-import CheckAll from '../Check-all';
-import ListFooter from '../List-footer';
+import Input from '../../components/Input';
+import List from '../../components/List';
+import CheckAll from '../../components/Check-all';
+import ListFooter from '../../components/List-footer';
+import Helper from '../../utils/helper';
 import './style.css';
 
 export default class TodoList extends PureComponent {
@@ -17,10 +18,6 @@ export default class TodoList extends PureComponent {
       filter: 'all',
     };
   }
-
-  sanitizeString = (value) => value.trim()
-    .replace(/</g, '&#60')
-    .replace(/>/g, '&#62');
 
   setFilter = (filterType) => {
     this.setState({
@@ -62,7 +59,10 @@ export default class TodoList extends PureComponent {
       tasks: tasks.map((item) => {
         if (item.id === task.id) {
           const status = !item.status;
-          return { ...item, status };
+          return {
+            ...item,
+            status,
+          };
         }
         return item;
       }),
@@ -76,7 +76,10 @@ export default class TodoList extends PureComponent {
   toggleAllTasks = (status) => {
     const { tasks } = this.state;
     this.setState({
-      tasks: tasks.map((item) => ({ ...item, status })),
+      tasks: tasks.map((item) => ({
+        ...item,
+        status,
+      })),
       counters: {
         active: status ? 0 : tasks.length,
         done: status ? tasks.length : 0,
@@ -97,10 +100,13 @@ export default class TodoList extends PureComponent {
 
   updateTask = async (task, inputValue) => {
     const { tasks } = this.state;
-    const description = this.sanitizeString(inputValue);
+    const description = Helper.sanitizeString(inputValue);
     if (!description) return false;
     await this.setState({
-      tasks: tasks.map((item) => (item.id === task.id ? { ...item, description } : item)),
+      tasks: tasks.map((item) => (item.id === task.id ? {
+        ...item,
+        description,
+      } : item)),
     });
     return true;
   };
@@ -109,27 +115,35 @@ export default class TodoList extends PureComponent {
     const { tasks, counters, filter } = this.state;
     const renderFlag = !!tasks.length;
     return (
-      <div className="mt-4 todo-list-wrapper">
-        <Input addTask={this.addTask} />
-        {renderFlag && (
-          <CheckAll toggleAllTasks={this.toggleAllTasks} quantityOfLeftTasks={counters.active} />)}
-        {renderFlag && (
-          <List
-            tasks={tasks}
-            removeTask={this.removeTask}
-            toggleTask={this.toggleTaskStatus}
-            updateTask={this.updateTask}
-            filter={filter}
-          />
-        )}
-        {renderFlag && (
-          <ListFooter
-            filter={filter}
-            counters={counters}
-            setFilter={this.setFilter}
-            removeCompletedTasks={this.removeCompletedTasks}
-          />
-        )}
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="mt-4 todo-list-wrapper col-12 col-md-8 col-lg-6">
+            <Input addTask={this.addTask} />
+            {renderFlag && (
+              <CheckAll
+                toggleAllTasks={this.toggleAllTasks}
+                quantityOfLeftTasks={counters.active}
+              />
+            )}
+            {renderFlag && (
+              <List
+                tasks={tasks}
+                removeTask={this.removeTask}
+                toggleTask={this.toggleTaskStatus}
+                updateTask={this.updateTask}
+                filter={filter}
+              />
+            )}
+            {renderFlag && (
+              <ListFooter
+                filter={filter}
+                counters={counters}
+                setFilter={this.setFilter}
+                removeCompletedTasks={this.removeCompletedTasks}
+              />
+            )}
+          </div>
+        </div>
       </div>
     );
   }

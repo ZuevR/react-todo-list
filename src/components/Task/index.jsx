@@ -40,8 +40,8 @@ export default class Task extends Component {
     const { task, updateTask } = this.props;
     if (event.nativeEvent.which === ENTER_KEY_CODE) {
       const newDescription = event.target.value;
-      const result = await updateTask(task, newDescription);
-      if (result) this.hideEditInput();
+      const updatedTask = await updateTask(task, newDescription);
+      if (updatedTask) this.hideEditInput();
     } else if (event.nativeEvent.which === ESCAPE_KEY_CODE) {
       this.hideEditInput();
     }

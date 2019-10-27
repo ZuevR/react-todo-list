@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Index from '../../Validator';
+import Index from '../../utils/validator';
 import s from './style.module.css';
 import { API_URL } from '../../constants';
 import AuthService from '../../auth';

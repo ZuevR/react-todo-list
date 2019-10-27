@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ENTER_KEY_CODE } from '../../constants';
+import Helper from '../../utils/helper';
 
 export default class Input extends Component {
   constructor(props) {
@@ -9,10 +10,6 @@ export default class Input extends Component {
       inputText: '',
     };
   }
-
-  sanitizeInput = (inputString) => inputString.trim()
-    .replace(/</g, '&#60')
-    .replace(/>/g, '&#62');
 
   clearInput = () => {
     this.setState({
@@ -33,7 +30,7 @@ export default class Input extends Component {
   onNewTaskInputKeyUp = (event) => {
     let { inputText } = this.state;
     const { addTask } = this.props;
-    inputText = this.sanitizeInput(inputText);
+    inputText = Helper.sanitizeString(inputText);
     if (!(event.nativeEvent.which === ENTER_KEY_CODE) || !inputText) return;
     addTask(inputText);
     this.clearInput();
@@ -42,7 +39,7 @@ export default class Input extends Component {
   onClickAddButton = () => {
     let { inputText } = this.state;
     const { addTask } = this.props;
-    inputText = this.sanitizeInput(inputText);
+    inputText = Helper.sanitizeString(inputText);
     if (!inputText) return;
     addTask(inputText);
     this.clearInput();

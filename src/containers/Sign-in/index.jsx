@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Index from '../../Validator';
+import Index from '../../utils/validator';
 import s from './style.module.css';
 
 const errorInput = {
