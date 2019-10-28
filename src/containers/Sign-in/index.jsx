@@ -62,7 +62,7 @@ export default class SignIn extends Component {
   };
 
   validateField = (value, field) => {
-    let errorMessage = 'false';
+    let errorMessage = '';
     if (Validator.required(value)) errorMessage = `The ${field} is required`;
     this.setState((prevState) => ({
       [field]: {
