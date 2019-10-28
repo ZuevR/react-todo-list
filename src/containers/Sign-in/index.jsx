@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Validator from '../../utils/Validator';
-import s from './style.module.css';
+import style from './style.module.css';
 
-const errorInput = {
+const errorInputStyle = {
   backgroundImage: 'none',
 };
 
@@ -14,15 +14,14 @@ export default class SignIn extends Component {
         value: '',
         valid: false,
         blurred: false,
-        errorMessage: false,
+        errorMessage: '',
       },
       password: {
         value: '',
         valid: false,
         blurred: false,
-        errorMessage: false,
+        errorMessage: '',
       },
-      isFormValid: false,
     };
   }
 
@@ -56,45 +55,22 @@ export default class SignIn extends Component {
   /* ========= Validation ========= */
   checkValidation = (input, value) => {
     switch (input) {
-      case 'email': return this.validateEmail(value);
-      case 'password': return this.validatePassword(value);
+      case 'email': return this.validateField(value, input);
+      case 'password': return this.validateField(value, input);
       default: return false;
     }
   };
 
-  validateEmail = (value) => {
-    let message = false;
-    if (Validator.required(value)) message = 'The email is required';
+  validateField = (value, field) => {
+    let errorMessage = 'false';
+    if (Validator.required(value)) errorMessage = `The ${field} is required`;
     this.setState((prevState) => ({
-      email: {
-        ...prevState.email,
-        errorMessage: message,
-        valid: !message,
+      [field]: {
+        ...prevState[field],
+        errorMessage,
+        valid: !errorMessage,
       },
-    }), () => {
-      this.checkSubmit();
-    });
-  };
-
-  validatePassword = (value) => {
-    let message = false;
-    if (Validator.required(value)) message = 'The password is required';
-    this.setState((prevState) => ({
-      password: {
-        ...prevState.password,
-        errorMessage: message,
-        valid: !message,
-      },
-    }), () => {
-      this.checkSubmit();
-    });
-  };
-
-  checkSubmit = () => {
-    const { email, password } = this.state;
-    this.setState({
-      isFormValid: email.valid && password.valid,
-    });
+    }));
   };
 
   /* ========= Other ========= */
@@ -103,13 +79,13 @@ export default class SignIn extends Component {
   };
 
   render() {
-    const { email, password, isFormValid } = this.state;
+    const { email, password } = this.state;
     return (
       <div className="container">
         <div className="row justify-content-center">
           <div className="form-wrapper col-xl-4 col-lg-5 col-md-7 col-sm-9 col-xs-12">
             <h1 className="text-center mt-5">Login form</h1>
-            <form className={`mt-5 ${s.form}`} onSubmit={this.onFormSubmit}>
+            <form className={`mt-5 ${style.form}`} onSubmit={this.onFormSubmit}>
               <div className="form-group row">
                 <label htmlFor="email" className="col-sm-3 col-form-label">Email</label>
                 <div className="col-sm-9">
@@ -117,7 +93,7 @@ export default class SignIn extends Component {
                     type="email"
                     name="email"
                     className={`form-control ${email.blurred && !email.valid ? 'is-invalid error-input' : false}`}
-                    style={errorInput}
+                    style={errorInputStyle}
                     id="email"
                     value={email.value}
                     onFocus={this.onFormInputFocus}
@@ -134,7 +110,7 @@ export default class SignIn extends Component {
                     type="password"
                     name="password"
                     className={`form-control ${password.blurred && !password.valid ? 'is-invalid error-input' : false}`}
-                    style={errorInput}
+                    style={errorInputStyle}
                     id="password"
                     value={password.value}
                     onFocus={this.onFormInputFocus}
@@ -147,7 +123,7 @@ export default class SignIn extends Component {
               <button
                 type="submit"
                 className="btn btn-secondary mt-3"
-                disabled={!isFormValid}
+                disabled={!(email.valid && password.valid)}
               >
                 Submit
               </button>
