@@ -1,35 +1,42 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Layout from './hoc/Layout';
 import SignUp from './containers/Sign-up';
 import SignIn from './containers/Sign-in';
 import TodoList from './containers/Todo-list';
-import AuthService from './auth';
+import AuthService from './services/AuthService';
 import './App.css';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // isAuth: false,
+      currentUser: AuthService.getCurrentUser,
     };
-    this.authService = new AuthService();
   }
 
+  checkUser = () => {
+    this.setState({
+      currentUser: AuthService.getCurrentUser,
+    });
+  };
+
   render() {
-    // const isAuth = this.state.authService.isAuth();
+    const { currentUser } = this.state;
     return (
-      <Layout authService={this.authService}>
+      <Layout user={currentUser}>
         <Switch>
-          {/* <Route exact path="/"> */}
-          {/*  {isAuth ? <Redirect to="/todo-list" /> : <Redirect to="/sign-in" />} */}
-          {/* </Route> */}
-          <Route path="/sign-up">
-            <SignUp authService={this.authService} />
+          <Route exact path="/">
+            {currentUser ? <Redirect to="/todo-list" /> : <Redirect to="/sign-in" />}
           </Route>
-          <Route path="/sign-in" component={SignIn} />
+          <Route path="/sign-up">
+            {currentUser ? <Redirect to="/todo-list" /> : <SignUp checkUser={this.checkUser} />}
+          </Route>
+          <Route path="/sign-in">
+            {currentUser ? <Redirect to="/todo-list" /> : <SignIn checkUser={this.checkUser} />}
+          </Route>
           <Route path="/todo-list">
-            <TodoList />
+            {!currentUser ? <Redirect to="/sign-in" /> : <TodoList />}
           </Route>
         </Switch>
       </Layout>

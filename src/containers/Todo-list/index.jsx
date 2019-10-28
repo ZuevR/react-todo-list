@@ -120,27 +120,25 @@ export default class TodoList extends PureComponent {
           <div className="mt-4 todo-list-wrapper col-12 col-md-8 col-lg-6">
             <Input addTask={this.addTask} />
             {renderFlag && (
-              <CheckAll
-                toggleAllTasks={this.toggleAllTasks}
-                quantityOfLeftTasks={counters.active}
-              />
-            )}
-            {renderFlag && (
-              <List
-                tasks={tasks}
-                removeTask={this.removeTask}
-                toggleTask={this.toggleTaskStatus}
-                updateTask={this.updateTask}
-                filter={filter}
-              />
-            )}
-            {renderFlag && (
-              <ListFooter
-                filter={filter}
-                counters={counters}
-                setFilter={this.setFilter}
-                removeCompletedTasks={this.removeCompletedTasks}
-              />
+              <>
+                <CheckAll
+                  toggleAllTasks={this.toggleAllTasks}
+                  quantityOfLeftTasks={counters.active}
+                />
+                <List
+                  tasks={tasks}
+                  removeTask={this.removeTask}
+                  toggleTask={this.toggleTaskStatus}
+                  updateTask={this.updateTask}
+                  filter={filter}
+                />
+                <ListFooter
+                  filter={filter}
+                  counters={counters}
+                  setFilter={this.setFilter}
+                  removeCompletedTasks={this.removeCompletedTasks}
+                />
+              </>
             )}
           </div>
         </div>

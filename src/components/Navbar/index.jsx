@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import s from './style.module.css';
+import style from './style.module.css';
 import logo from '../../assets/images/site-logo.png';
-import AuthService from '../../auth';
 
 const activeStyle = {
   color: '#ffffff',
@@ -15,16 +14,7 @@ export default class Navbar extends Component {
     super(props);
     this.state = {
       showMenu: false,
-      currentUser: null,
     };
-  }
-
-  async componentDidMount() {
-    const { authService } = this.props;
-    const currentUser = (await authService.getCurrentUser()).data;
-    this.setState({
-      currentUser,
-    });
   }
 
   onNavToggleClick = () => {
@@ -34,7 +24,8 @@ export default class Navbar extends Component {
   };
 
   render() {
-    const { showMenu, currentUser } = this.state;
+    const { showMenu } = this.state;
+    const { user } = this.props;
     return (
       <nav className="navbar navbar-expand-md navbar-dark bg-secondary">
         <button className="navbar-toggler" type="button" onClick={this.onNavToggleClick}>
@@ -47,29 +38,29 @@ export default class Navbar extends Component {
             className="navbar-brand d-none d-md-block"
             rel="noopener noreferrer"
           >
-            <img src={logo} className={s.logo} alt="logo" />
+            <img src={logo} className={style.logo} alt="logo" />
           </a>
           <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-            {!currentUser && (
+            {!user && (
               <>
                 <li className="nav-item mx-1">
                   <NavLink to="/sign-up" className="nav-link" activeStyle={activeStyle}>
-                Sign up
+                    Sign up
                   </NavLink>
                 </li>
                 <li className="nav-item mx-1">
                   <NavLink to="/sign-in" className="nav-link" activeStyle={activeStyle}>
-                Sign in
+                    Sign in
                   </NavLink>
                 </li>
               </>
             )}
-            {currentUser && (
-            <li className="nav-item mx-1">
-              <button type="button" className="btn shadow-none nav-link">
-                {`Logout (${currentUser.name})`}
-              </button>
-            </li>
+            {user && (
+              <li className="nav-item mx-1">
+                <button type="button" className="btn shadow-none nav-link">
+                  {`Logout (${user.name})`}
+                </button>
+              </li>
             )}
           </ul>
         </div>
@@ -79,5 +70,9 @@ export default class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-  authService: PropTypes.instanceOf(AuthService).isRequired,
+  user: PropTypes.objectOf(PropTypes.any),
+};
+
+Navbar.defaultProps = {
+  user: null,
 };

@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import AuthService from '../../services/AuthService';
 import Validator from '../../utils/Validator';
-import AuthService from '../../auth';
 import style from './style.module.css';
 
-const errorInput = {
+const errorInputStyle = {
   backgroundImage: 'none',
 };
 
-export default class SignUp extends PureComponent {
+class SignUp extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -126,15 +126,16 @@ export default class SignUp extends PureComponent {
   onFormSubmit = async (event) => {
     event.preventDefault();
     const { name, email, password } = this.state;
-    const { authService } = this.props;
+    const { history, checkUser } = this.props;
     const data = {
       name: name.value,
       email: email.value,
       password: password.value,
     };
     try {
-      const response = await authService.signUp(data);
-      authService.setToken(response.data);
+      await AuthService.signUp(data);
+      history.push('/todo-list');
+      checkUser();
     } catch (error) {
       const errorMessage = error.response.data.message || 'something broke';
       this.setState({
@@ -168,7 +169,7 @@ export default class SignUp extends PureComponent {
                     name="name"
                     id="name"
                     className={`form-control ${name.blurred && !name.valid ? 'is-invalid' : false}`}
-                    style={errorInput}
+                    style={errorInputStyle}
                     value={name.value}
                     onFocus={this.onFormInputFocus}
                     onChange={this.onFormInputChange}
@@ -184,7 +185,7 @@ export default class SignUp extends PureComponent {
                     type="email"
                     name="email"
                     className={`form-control ${email.blurred && !email.valid ? 'is-invalid' : false}`}
-                    style={errorInput}
+                    style={errorInputStyle}
                     id="email"
                     value={email.value}
                     onFocus={this.onFormInputFocus}
@@ -201,7 +202,7 @@ export default class SignUp extends PureComponent {
                     type="password"
                     name="password"
                     className={`form-control ${password.blurred && !password.valid ? 'is-invalid' : false}`}
-                    style={errorInput}
+                    style={errorInputStyle}
                     id="password"
                     value={password.value}
                     onFocus={this.onFormInputFocus}
@@ -230,5 +231,8 @@ export default class SignUp extends PureComponent {
 }
 
 SignUp.propTypes = {
-  authService: PropTypes.instanceOf(AuthService).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  checkUser: PropTypes.func.isRequired,
 };
+
+export default withRouter(SignUp);

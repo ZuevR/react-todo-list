@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Navbar from '../../components/Navbar';
-import AuthService from '../../auth';
 
-const Layout = ({ children, authService }) => (
+const Layout = ({ children, user }) => (
   <div>
-    <Navbar authService={authService} />
+    <Navbar user={user} />
 
     <main>
       {children}
@@ -18,7 +17,10 @@ Layout.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  authService: PropTypes.instanceOf(AuthService).isRequired,
+  user: PropTypes.objectOf(PropTypes.any),
 };
 
+Layout.defaultProps = {
+  user: null,
+};
 export default Layout;
