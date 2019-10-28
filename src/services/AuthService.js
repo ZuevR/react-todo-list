@@ -14,7 +14,8 @@ export default class AuthService {
 
   static setToken = (token) => {
     if (token) {
-      const expDate = new Date(token.exp * 1000);
+      const payload = decode(token);
+      const expDate = new Date(payload.exp * 1000);
       localStorage.setItem('token', token);
       localStorage.setItem('token-exp', expDate.toString());
       return;
