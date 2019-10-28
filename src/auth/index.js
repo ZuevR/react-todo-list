@@ -2,30 +2,40 @@ import axios from 'axios';
 import { API_URL } from '../constants';
 
 export default class AuthService {
-  static get token() {
+  getCurrentUser() {
+    const { token } = this;
+    if (!token) return null;
+    return axios({
+      method: 'GET',
+      url: `${API_URL}/auth/check-identity`,
+      headers: { token },
+    });
+  }
+
+  get token() {
     const expDate = new Date(localStorage.getItem('token-exp'));
     if (new Date() > expDate) {
-      AuthService.setToken(null);
+      this.setToken(null);
       return null;
     }
     return localStorage.getItem('token');
   }
 
-  static setToken(response) {
-    if (response) {
-      const expDate = new Date(response.token.expire * 1000);
-      localStorage.setItem('token', response.token.id);
+  static setToken(token) {
+    if (token) {
+      const expDate = new Date(token.exp * 1000);
+      localStorage.setItem('token', token);
       localStorage.setItem('token-exp', expDate.toString());
-    } else {
-      localStorage.clear();
+      return;
     }
+    localStorage.clear();
   }
 
-  static isAuth() {
-    return !!AuthService.token;
+  isAuth() {
+    return !!this.token;
   }
 
-  static signUp(formData) {
+  signUp(formData) {
     return axios({
       method: 'POST',
       url: `${API_URL}/auth/sign-up`,
@@ -34,7 +44,8 @@ export default class AuthService {
         email: formData.email,
         password: formData.password,
       },
-    });
+    })
+      .then((token) => this.setToken(token));
   }
 
   static signIn(formData) {
@@ -47,5 +58,4 @@ export default class AuthService {
       },
     });
   }
-
 }

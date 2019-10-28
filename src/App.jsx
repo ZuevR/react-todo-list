@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import Layout from './hoc/Layout';
 import SignUp from './containers/Sign-up';
 import SignIn from './containers/Sign-in';
@@ -7,20 +7,32 @@ import TodoList from './containers/Todo-list';
 import AuthService from './auth';
 import './App.css';
 
-function App() {
-  const isAuth = AuthService.isAuth();
-  return (
-    <Layout>
-      <Switch>
-        <Route exact path="/">
-          {isAuth ? <Redirect to="/todo-list" /> : <Redirect to="/sign-in" />}
-        </Route>
-        <Route path="/sign-up" component={SignUp} />
-        <Route path="/sign-in" component={SignIn} />
-        <Route path="/todo-list" component={TodoList} />
-      </Switch>
-    </Layout>
-  );
-}
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // isAuth: false,
+    };
+    this.authService = new AuthService();
+  }
 
-export default App;
+  render() {
+    // const isAuth = this.state.authService.isAuth();
+    return (
+      <Layout authService={this.authService}>
+        <Switch>
+          {/* <Route exact path="/"> */}
+          {/*  {isAuth ? <Redirect to="/todo-list" /> : <Redirect to="/sign-in" />} */}
+          {/* </Route> */}
+          <Route path="/sign-up">
+            <SignUp authService={this.authService} />
+          </Route>
+          <Route path="/sign-in" component={SignIn} />
+          <Route path="/todo-list">
+            <TodoList />
+          </Route>
+        </Switch>
+      </Layout>
+    );
+  }
+}

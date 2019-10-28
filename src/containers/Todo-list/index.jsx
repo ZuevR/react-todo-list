@@ -3,7 +3,7 @@ import Input from '../../components/Input';
 import List from '../../components/List';
 import CheckAll from '../../components/Check-all';
 import ListFooter from '../../components/List-footer';
-import Helper from '../../utils/helper';
+import StringHelper from '../../utils/StringHelper';
 import './style.css';
 
 export default class TodoList extends PureComponent {
@@ -100,7 +100,7 @@ export default class TodoList extends PureComponent {
 
   updateTask = async (task, inputValue) => {
     const { tasks } = this.state;
-    const description = Helper.sanitizeString(inputValue);
+    const description = StringHelper.sanitizeString(inputValue);
     if (!description) return false;
     await this.setState({
       tasks: tasks.map((item) => (item.id === task.id ? {

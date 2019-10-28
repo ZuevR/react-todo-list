@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
-import Index from '../../utils/validator';
-import s from './style.module.css';
+import PropTypes from 'prop-types';
+import Validator from '../../utils/Validator';
 import AuthService from '../../auth';
+import style from './style.module.css';
 
 const errorInput = {
   backgroundImage: 'none',
@@ -16,21 +17,20 @@ export default class SignUp extends PureComponent {
         value: '',
         valid: false,
         blurred: false,
-        errorMessage: false,
+        errorMessage: '',
       },
       email: {
         value: '',
         valid: false,
         blurred: false,
-        errorMessage: false,
+        errorMessage: '',
       },
       password: {
         value: '',
         valid: false,
         blurred: false,
-        errorMessage: false,
+        errorMessage: '',
       },
-      isFormValid: false,
       formError: false,
     };
   }
@@ -78,83 +78,68 @@ export default class SignUp extends PureComponent {
   };
 
   validateName = (value) => {
-    let message = false;
-    if (Index.required(value)) message = 'The name is required';
+    let errorMessage = '';
+    if (Validator.required(value)) errorMessage = 'The name is required';
     this.setState((prevState) => ({
       name: {
         ...prevState.name,
-        errorMessage: message,
-        valid: !message,
+        errorMessage,
+        valid: !errorMessage,
       },
-    }), () => {
-      this.checkSubmit();
-    });
+    }));
   };
 
   validateEmail = (value) => {
-    let message = false;
-    if (Index.required(value)) {
-      message = 'The email is required';
-    } else if (Index.isEmail(value)) {
-      message = 'Incorrect Email';
+    let errorMessage = '';
+    if (Validator.required(value)) {
+      errorMessage = 'The email is required';
+    } else if (Validator.isEmail(value)) {
+      errorMessage = 'Incorrect Email';
     }
     this.setState((prevState) => ({
       email: {
         ...prevState.email,
-        errorMessage: message,
-        valid: !message,
+        errorMessage,
+        valid: !errorMessage,
       },
-    }), () => {
-      this.checkSubmit();
-    });
+    }));
   };
 
   validatePassword = (value) => {
-    let message = false;
-    if (Index.required(value)) {
-      message = 'The password is required';
-    } else if (Index.minLength(value, 6)) {
-      message = 'The password should contain 6 characters at least';
+    let errorMessage = '';
+    if (Validator.required(value)) {
+      errorMessage = 'The password is required';
+    } else if (Validator.minLength(value, 6)) {
+      errorMessage = 'The password should contain 6 characters at least';
     }
     this.setState((prevState) => ({
       password: {
         ...prevState.password,
-        errorMessage: message,
-        valid: !message,
+        errorMessage,
+        valid: !errorMessage,
       },
-    }), () => {
-      this.checkSubmit();
-    });
-  };
-
-  checkSubmit = () => {
-    const { name, email, password } = this.state;
-    this.setState({
-      isFormValid: name.valid && email.valid && password.valid,
-    });
+    }));
   };
 
   /* ========= Other ========= */
-  setFormError = (message) => {
-    this.setState({
-      formError: message,
-    });
-  };
 
   onFormSubmit = async (event) => {
     event.preventDefault();
     const { name, email, password } = this.state;
+    const { authService } = this.props;
     const data = {
       name: name.value,
       email: email.value,
       password: password.value,
     };
     try {
-      const response = await AuthService.signUp(data);
-      AuthService.setToken(response.data);
+      const response = await authService.signUp(data);
+      authService.setToken(response.data);
     } catch (error) {
       const errorMessage = error.response.data.message || 'something broke';
-      this.setFormError(errorMessage);
+      this.setState({
+        formError: errorMessage,
+      });
     }
   };
 
@@ -163,7 +148,6 @@ export default class SignUp extends PureComponent {
       email,
       name,
       password,
-      isFormValid,
       formError,
     } = this.state;
     return (
@@ -171,9 +155,10 @@ export default class SignUp extends PureComponent {
         <div className="row justify-content-center">
           <div className="form-wrapper col-xl-4 col-lg-5 col-md-7 col-sm-9 col-xs-12">
             <h1 className="text-center mt-5">Registration form</h1>
-            <form className={`${s.form} mt-5`} onSubmit={this.onFormSubmit}>
-              <div className={s.errorBlock}>
-                {formError && <div className="text-center text-light bg-danger p-1">{formError}</div>}
+            <form className={`${style.form} mt-5`} onSubmit={this.onFormSubmit}>
+              <div className={style.errorBlock}>
+                {formError
+                && <div className="text-center text-light bg-danger p-1">{formError}</div>}
               </div>
               <div className="form-group row mt-2">
                 <label htmlFor="name" className="col-sm-3 col-form-label">Name</label>
@@ -229,7 +214,7 @@ export default class SignUp extends PureComponent {
               <button
                 type="submit"
                 className="btn btn-secondary mt-3"
-                disabled={!isFormValid}
+                disabled={!(name.valid && email.valid && password.valid)}
               >
                 Submit
               </button>
@@ -243,3 +228,7 @@ export default class SignUp extends PureComponent {
     );
   }
 }
+
+SignUp.propTypes = {
+  authService: PropTypes.instanceOf(AuthService).isRequired,
+};

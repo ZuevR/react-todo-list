@@ -1,4 +1,4 @@
-export default class Index {
+export default class Validator {
   static required = (value) => !value.trim();
 
   static isEmail = (value) => !((/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i).test(value));

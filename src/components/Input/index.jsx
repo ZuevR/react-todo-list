@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ENTER_KEY_CODE } from '../../constants';
-import Helper from '../../utils/helper';
+import StringHelper from '../../utils/StringHelper';
 
 export default class Input extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ export default class Input extends Component {
   onNewTaskInputKeyUp = (event) => {
     let { inputText } = this.state;
     const { addTask } = this.props;
-    inputText = Helper.sanitizeString(inputText);
+    inputText = StringHelper.sanitizeString(inputText);
     if (!(event.nativeEvent.which === ENTER_KEY_CODE) || !inputText) return;
     addTask(inputText);
     this.clearInput();
@@ -39,7 +39,7 @@ export default class Input extends Component {
   onClickAddButton = () => {
     let { inputText } = this.state;
     const { addTask } = this.props;
-    inputText = Helper.sanitizeString(inputText);
+    inputText = StringHelper.sanitizeString(inputText);
     if (!inputText) return;
     addTask(inputText);
     this.clearInput();
