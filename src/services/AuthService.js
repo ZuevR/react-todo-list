@@ -2,13 +2,19 @@ import axios from 'axios';
 import { decode } from 'jsonwebtoken';
 
 export default class AuthService {
-  static get getCurrentUser() {
+  static get token() {
     const expDate = new Date(localStorage.getItem('token-exp'));
     if (new Date() > expDate) {
       this.setToken(null);
       return null;
     }
-    return decode(localStorage.getItem('token'));
+    return localStorage.getItem('token');
+  }
+
+  static get currentUser() {
+    const { token } = this;
+    if (!token) return null;
+    return decode(this.token);
   }
 
   static setToken(token) {

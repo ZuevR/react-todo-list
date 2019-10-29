@@ -11,13 +11,13 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: AuthService.getCurrentUser,
+      currentUser: AuthService.currentUser,
     };
   }
 
   checkUser = () => {
     this.setState({
-      currentUser: AuthService.getCurrentUser,
+      currentUser: AuthService.currentUser,
     });
   };
 
