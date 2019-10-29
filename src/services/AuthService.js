@@ -22,10 +22,6 @@ export default class AuthService {
     localStorage.clear();
   }
 
-  static isAuth() {
-    return !!this.getCurrentUser;
-  }
-
   static logout() {
     this.setToken(null);
   }
@@ -54,6 +50,10 @@ export default class AuthService {
         email: formData.email,
         password: formData.password,
       },
-    });
+    })
+      .then((response) => {
+        const { token } = response.data;
+        this.setToken(token);
+      });
   }
 }

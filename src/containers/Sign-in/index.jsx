@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import Validator from '../../utils/Validator';
 import style from './style.module.css';
+import AuthService from '../../services/AuthService';
 
 const errorInputStyle = {
   backgroundImage: 'none',
 };
 
-export default class SignIn extends Component {
+class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +25,7 @@ export default class SignIn extends Component {
         blurred: false,
         errorMessage: '',
       },
+      formError: false,
     };
   }
 
@@ -55,9 +59,12 @@ export default class SignIn extends Component {
   /* ========= Validation ========= */
   checkValidation = (input, value) => {
     switch (input) {
-      case 'email': return this.validateField(value, input);
-      case 'password': return this.validateField(value, input);
-      default: return false;
+      case 'email':
+        return this.validateField(value, input);
+      case 'password':
+        return this.validateField(value, input);
+      default:
+        return false;
     }
   };
 
@@ -74,19 +81,41 @@ export default class SignIn extends Component {
   };
 
   /* ========= Other ========= */
-  onFormSubmit = (event) => {
+  onFormSubmit = async (event) => {
     event.preventDefault();
+    const { email, password } = this.state;
+    const { history, checkUser } = this.props;
+    const data = {
+      email: email.value,
+      password: password.value,
+    };
+    try {
+      await AuthService.signIn(data);
+      history.push('/todo-list');
+      checkUser();
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : 'something broke';
+      this.setState({
+        formError: errorMessage,
+      });
+    }
   };
 
   render() {
-    const { email, password } = this.state;
+    const { email, password, formError } = this.state;
     return (
       <div className="container">
         <div className="row justify-content-center">
           <div className="form-wrapper col-xl-4 col-lg-5 col-md-7 col-sm-9 col-xs-12">
             <h1 className="text-center mt-5">Login form</h1>
             <form className={`mt-5 ${style.form}`} onSubmit={this.onFormSubmit}>
-              <div className="form-group row">
+              <div className={style.errorBlock}>
+                {formError
+                && <div className="text-center text-light bg-danger p-1">{formError}</div>}
+              </div>
+              <div className="form-group row mt-2">
                 <label htmlFor="email" className="col-sm-3 col-form-label">Email</label>
                 <div className="col-sm-9">
                   <input
@@ -127,6 +156,9 @@ export default class SignIn extends Component {
               >
                 Submit
               </button>
+              <Link to="/sign-up">
+                <div className="mt-4 text-muted text-center">Do not have account?</div>
+              </Link>
             </form>
           </div>
         </div>
@@ -134,3 +166,10 @@ export default class SignIn extends Component {
     );
   }
 }
+
+SignIn.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  checkUser: PropTypes.func.isRequired,
+};
+
+export default withRouter(SignIn);
