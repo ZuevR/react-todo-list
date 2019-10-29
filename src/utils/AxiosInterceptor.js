@@ -7,7 +7,11 @@ class AxiosInterceptor {
     axiosInstance
       .interceptors
       .request
-      .use((request) => this.requestHandler(request));
+      .use(
+        (request) => this.requestHandler(request),
+        // eslint-disable-next-line prefer-promise-reject-errors
+        (error) => Promise.reject({ ...error }),
+      );
     return axiosInstance;
   }
 
