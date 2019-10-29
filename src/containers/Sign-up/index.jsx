@@ -220,7 +220,7 @@ class SignUp extends PureComponent {
                 Submit
               </button>
               <Link to="/sign-in">
-                <div className="mt-4 text-muted text-center">Already have account?</div>
+                <div className="mt-4 text-muted text-center">Already have an account?</div>
               </Link>
             </form>
           </div>

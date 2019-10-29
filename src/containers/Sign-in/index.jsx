@@ -157,7 +157,7 @@ class SignIn extends Component {
                 Submit
               </button>
               <Link to="/sign-up">
-                <div className="mt-4 text-muted text-center">Do not have account?</div>
+                <div className="mt-4 text-muted text-center">Do not have an account?</div>
               </Link>
             </form>
           </div>

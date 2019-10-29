@@ -4,6 +4,7 @@ import List from '../../components/List';
 import CheckAll from '../../components/Check-all';
 import ListFooter from '../../components/List-footer';
 import StringHelper from '../../utils/StringHelper';
+import TaskService from '../../services/TaskService';
 import './style.css';
 
 export default class TodoList extends PureComponent {
@@ -25,16 +26,15 @@ export default class TodoList extends PureComponent {
     });
   };
 
-  addTask = (taskDescription) => {
+  addTask = async (taskDescription) => {
     const { tasks, counters } = this.state;
-    const newTask = {
-      id: Date.now(),
+    const task = {
       description: taskDescription,
       status: false,
     };
-
+    const savedTask = await TaskService.addNewTask(task);
     this.setState({
-      tasks: [...tasks, newTask],
+      tasks: [...tasks, savedTask],
       counters: {
         ...counters,
         active: counters.active + 1,
