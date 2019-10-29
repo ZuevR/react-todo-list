@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Navbar from '../../components/Navbar';
 
-const Layout = ({ children, user }) => (
+const Layout = ({ children, user, checkUser }) => (
   <div>
-    <Navbar user={user} />
+    <Navbar user={user} checkUser={checkUser} />
 
     <main>
       {children}
@@ -18,6 +18,7 @@ Layout.propTypes = {
     PropTypes.node,
   ]).isRequired,
   user: PropTypes.objectOf(PropTypes.any),
+  checkUser: PropTypes.func.isRequired,
 };
 
 Layout.defaultProps = {

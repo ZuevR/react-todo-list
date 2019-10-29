@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import style from './style.module.css';
 import logo from '../../assets/images/site-logo.png';
+import AuthService from '../../services/AuthService';
 
 const activeStyle = {
   color: '#ffffff',
@@ -23,13 +24,19 @@ export default class Navbar extends Component {
     }));
   };
 
+  logout = () => {
+    const { checkUser } = this.props;
+    AuthService.logout();
+    checkUser();
+  };
+
   render() {
     const { showMenu } = this.state;
     const { user } = this.props;
     return (
       <nav className="navbar navbar-expand-md navbar-dark bg-secondary">
         <button className="navbar-toggler" type="button" onClick={this.onNavToggleClick}>
-          <span className="navbar-toggler-icon" />
+          <span className="navbar-toggler-icon"/>
         </button>
         <div className="collapse navbar-collapse" style={showMenu ? { display: 'block' } : null}>
           <a
@@ -38,7 +45,7 @@ export default class Navbar extends Component {
             className="navbar-brand d-none d-md-block"
             rel="noopener noreferrer"
           >
-            <img src={logo} className={style.logo} alt="logo" />
+            <img src={logo} className={style.logo} alt="logo"/>
           </a>
           <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
             {!user && (
@@ -57,7 +64,11 @@ export default class Navbar extends Component {
             )}
             {user && (
               <li className="nav-item mx-1">
-                <button type="button" className="btn shadow-none nav-link">
+                <button
+                  type="button"
+                  className="btn shadow-none nav-link"
+                  onClick={this.logout}
+                >
                   {`Logout (${user.name})`}
                 </button>
               </li>
@@ -71,6 +82,7 @@ export default class Navbar extends Component {
 
 Navbar.propTypes = {
   user: PropTypes.objectOf(PropTypes.any),
+  checkUser: PropTypes.func.isRequired,
 };
 
 Navbar.defaultProps = {

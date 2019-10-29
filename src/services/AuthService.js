@@ -11,7 +11,7 @@ export default class AuthService {
     return decode(localStorage.getItem('token'));
   }
 
-  static setToken = (token) => {
+  static setToken(token) {
     if (token) {
       const payload = decode(token);
       const expDate = new Date(payload.exp * 1000);
@@ -20,16 +20,20 @@ export default class AuthService {
       return;
     }
     localStorage.clear();
-  };
+  }
 
   static isAuth() {
     return !!this.getCurrentUser;
   }
 
+  static logout() {
+    this.setToken(null);
+  }
+
   static signUp(formData) {
     return axios({
       method: 'POST',
-      url: `${process.env.API_URL}/auth/sign-up`,
+      url: `${process.env.REACT_APP_API_URL}/auth/sign-up`,
       data: {
         name: formData.name,
         email: formData.email,
@@ -45,7 +49,7 @@ export default class AuthService {
   static signIn(formData) {
     return axios({
       method: 'POST',
-      url: `${process.env.API_URL}/auth/sign-in`,
+      url: `${process.env.REACT_APP_API_URL}/auth/sign-in`,
       data: {
         email: formData.email,
         password: formData.password,

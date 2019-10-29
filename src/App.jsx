@@ -24,7 +24,7 @@ export default class App extends Component {
   render() {
     const { currentUser } = this.state;
     return (
-      <Layout user={currentUser}>
+      <Layout user={currentUser} checkUser={this.checkUser}>
         <Switch>
           <Route exact path="/">
             {currentUser ? <Redirect to="/todo-list" /> : <Redirect to="/sign-in" />}
