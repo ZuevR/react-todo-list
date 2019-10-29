@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { decode } from 'jsonwebtoken';
-import { API_URL } from '../constants';
 
 export default class AuthService {
   static get getCurrentUser() {
@@ -30,7 +29,7 @@ export default class AuthService {
   static signUp(formData) {
     return axios({
       method: 'POST',
-      url: `${API_URL}/auth/sign-up`,
+      url: `${process.env.API_URL}/auth/sign-up`,
       data: {
         name: formData.name,
         email: formData.email,
@@ -46,7 +45,7 @@ export default class AuthService {
   static signIn(formData) {
     return axios({
       method: 'POST',
-      url: `${API_URL}/auth/sign-in`,
+      url: `${process.env.API_URL}/auth/sign-in`,
       data: {
         email: formData.email,
         password: formData.password,
